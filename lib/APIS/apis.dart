@@ -2,7 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:kridaverse_e_commerce/Custom%20Widgets/custom_bottom_navbar.dart';
 import 'package:kridaverse_e_commerce/Custom%20Widgets/popup_and_loader.dart';
+import 'package:kridaverse_e_commerce/Custom%20Widgets/reusable_bottom_navbar.dart';
+import 'package:kridaverse_e_commerce/Model/addtocart_model.dart';
 import 'package:kridaverse_e_commerce/Model/logged_user.dart';
 import 'package:kridaverse_e_commerce/screens/home_screen.dart';
 import 'package:kridaverse_e_commerce/screens/login_screen.dart';
@@ -50,6 +53,113 @@ class Apis {
     email: user.email.toString(),
   );
 
+  // Getting user data
+  static Future getUserData() async {
+    await firestore.collection('users').doc(user.uid).get().then((user) async {
+      if (user.exists) {
+        me = LoggedUser.fromJson(user.data()!);
+      } else {
+        await createUser().then((value) => getUserData);
+      }
+    });
+  }
+
+  // Default stream Builder
+  static CollectionReference<Object?> fetchstream(String Collction) {
+    final CollectionReference collections = firestore.collection(Collction);
+
+    return collections;
+  }
+
+  // Fetch Add to cart
+  static CollectionReference<Object?> fetchAddtoCartstream(
+      String Collction, String docs, String subCollection) {
+    final CollectionReference collections =
+        firestore.collection(Collction).doc(docs).collection(subCollection);
+
+    return collections;
+  }
+
+  // AddtoCart
+  static Future<void> addtocart(
+      String brandId, DocumentSnapshot documentSnapshot) async {
+    await firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('myaddtocart')
+        .doc(brandId)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        await firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('myaddtocart')
+            .doc(brandId)
+            .update({"qty": value['qty'] + 1});
+      } else {
+        final Map<String, dynamic> data =
+            documentSnapshot.data() as Map<String, dynamic>;
+        final AddtoCartJson dids = AddtoCartJson(
+          img: documentSnapshot['img'],
+          price: documentSnapshot['price'],
+          name: documentSnapshot['name'],
+          discription: documentSnapshot['discription'],
+          qty: 1,
+        );
+
+        firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('myaddtocart')
+            .doc(brandId)
+            .set(dids.toJson());
+      }
+    });
+  }
+
+  // remove from cart
+  static Future<void> removetocart(String brandId) async {
+    await firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('myaddtocart')
+        .doc(brandId)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        print(value['qty']);
+        await firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('myaddtocart')
+            .doc(brandId)
+            .update({"qty": value['qty'] - 1});
+      }
+    });
+  }
+
+  // Delete from Cart
+  static Future<void> deletefromcart(String brandId) async {
+    await firestore
+        .collection('users')
+        .doc(user.uid)
+        .collection('myaddtocart')
+        .doc(brandId)
+        .get()
+        .then((value) async {
+      if (value.exists) {
+        print(value['qty']);
+        await firestore
+            .collection('users')
+            .doc(user.uid)
+            .collection('myaddtocart')
+            .doc(brandId)
+            .delete();
+      }
+    });
+  }
+
   // Sign In With Google
   Future<UserCredential?> signInWithGoogle() async {
     try {
@@ -88,12 +198,16 @@ class Apis {
           print("User Detail : ${user.user}");
           Navigator.pop(context);
           if (await userExists()) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ReusableBottomNavbar()));
           } else {
             await createUser().then((value) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ReusableBottomNavbar()));
             });
           }
         }
@@ -127,12 +241,16 @@ class Apis {
           Navigator.pop(context);
           print("User Detail : ${user.user}");
           if (await userExists()) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ReusableBottomNavbar()));
           } else {
             await createUser().then((value) {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()));
+              Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ReusableBottomNavbar()));
             });
           }
         }

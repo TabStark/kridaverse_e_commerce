@@ -43,6 +43,9 @@ dependencies:
   another_flushbar: ^1.12.30
   fan_carousel_image_slider: ^0.1.2
   flutter_spinkit: ^5.2.1
+  persistent_bottom_nav_bar: ^5.0.2
+  persistent_bottom_nav_bar_v2: ^5.1.0
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
@@ -68,7 +71,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/googleLogo.png
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

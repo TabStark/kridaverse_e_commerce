@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:kridaverse_e_commerce/APIS/apis.dart';
+import 'package:kridaverse_e_commerce/Custom%20Widgets/custom_bottom_navbar.dart';
 import 'package:kridaverse_e_commerce/Custom%20Widgets/eleveted_button.dart';
 import 'package:kridaverse_e_commerce/Custom%20Widgets/popup_and_loader.dart';
+import 'package:kridaverse_e_commerce/Custom%20Widgets/reusable_bottom_navbar.dart';
 import 'package:kridaverse_e_commerce/Custom%20Widgets/text_form_field.dart';
 import 'package:kridaverse_e_commerce/Theme/appColor.dart';
 import 'package:kridaverse_e_commerce/main.dart';
@@ -133,11 +135,11 @@ class _LoginScreenState extends State<LoginScreen>
         print('User data: ${user}');
         if (await Apis.userExists()) {
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
+              MaterialPageRoute(builder: (context) => const ReusableBottomNavbar()));
         } else {
           await Apis.createUser().then((value) {
             Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const HomeScreen()));
+                MaterialPageRoute(builder: (context) => const ReusableBottomNavbar()));
           });
         }
       } else {
