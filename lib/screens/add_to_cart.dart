@@ -147,10 +147,6 @@ class _AddToCartState extends State<AddToCart> with TickerProviderStateMixin {
                                                                     .circular(
                                                                         3))),
                                                     onPressed: () async {
-                                                      // Decreasing cart qty by using minus icon
-                                                      // DialogsWidget.showProgressBar(
-                                                      //     context,
-                                                      //     _Animationcontroller);
                                                       await Apis.removetocart(
                                                               addtocartdoc)
                                                           .then((value) {
@@ -175,10 +171,7 @@ class _AddToCartState extends State<AddToCart> with TickerProviderStateMixin {
                                                                     .circular(
                                                                         3))),
                                                     onPressed: () async {
-                                                      // Delete from Cart
-                                                      // DialogsWidget.showProgressBar(
-                                                      //     context,
-                                                      //     _Animationcontroller);
+                                                    
                                                       await Apis.deletefromcart(
                                                               addtocartdoc)
                                                           .then((value) {

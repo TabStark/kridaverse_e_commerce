@@ -46,7 +46,10 @@ class _LoginScreenState extends State<LoginScreen>
               children: [
                 //  Email Field
                 ReusableTextFormField(
-                    controller: _emailController, fieldName: 'Email', keyboardtype: TextInputType.emailAddress,),
+                  controller: _emailController,
+                  fieldName: 'Email',
+                  keyboardtype: TextInputType.emailAddress,
+                ),
 
                 SizedBox(
                   height: mq.height * .02,
@@ -55,7 +58,8 @@ class _LoginScreenState extends State<LoginScreen>
                 ReusableTextFormField(
                   controller: _passwordController,
                   fieldName: 'Password',
-                  isObsecure: true, keyboardtype: TextInputType.visiblePassword,
+                  isObsecure: true,
+                  keyboardtype: TextInputType.visiblePassword,
                 ),
                 SizedBox(
                   height: mq.height * .03,
@@ -134,12 +138,17 @@ class _LoginScreenState extends State<LoginScreen>
       if (user != null) {
         print('User data: ${user}');
         if (await Apis.userExists()) {
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const ReusableBottomNavbar()));
+          Apis.getUserData();
+          Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ReusableBottomNavbar()));
         } else {
           await Apis.createUser().then((value) {
-            Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const ReusableBottomNavbar()));
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const ReusableBottomNavbar()));
           });
         }
       } else {

@@ -9,6 +9,7 @@ import 'package:kridaverse_e_commerce/Model/addtocart_model.dart';
 import 'package:kridaverse_e_commerce/Model/logged_user.dart';
 import 'package:kridaverse_e_commerce/screens/home_screen.dart';
 import 'package:kridaverse_e_commerce/screens/login_screen.dart';
+import 'package:persistent_bottom_nav_bar_v2/persistent_bottom_nav_bar_v2.dart';
 
 class Apis {
   // Firease Auth
@@ -271,14 +272,12 @@ class Apis {
   }
 
   // Logout
-  Future<void> logoutFromDevice(
-      BuildContext context, animationcontroller) async {
-    DialogsWidget.showProgressBar(context, animationcontroller);
+  Future<void> logoutFromDevice(BuildContext context) async {
+    // DialogsWidget.showProgressBar(context, animationcontroller);
     await Apis.auth.signOut().then((value) async {
       await GoogleSignIn().signOut().then((value) {
-        Navigator.pop(context);
         Apis.auth = FirebaseAuth.instance;
-        Navigator.pushReplacement(context,
+        pushWithoutNavBar(context,
             MaterialPageRoute(builder: (context) => const LoginScreen()));
       });
     });
